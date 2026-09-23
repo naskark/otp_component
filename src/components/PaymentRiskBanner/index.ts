@@ -1,0 +1,1 @@
+export {PaymentRiskBanner} from './PaymentRiskBanner';
