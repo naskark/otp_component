@@ -16,6 +16,14 @@ npm run ios
 npm run android
 ```
 
+Release APK (Node 22+ required):
+
+```bash
+npm run android:release
+```
+
+Output: `android/app/build/outputs/apk/release/app-release.apk`
+
 ### iOS
 
 Workspace: `ios/otp_component.xcworkspace`. Signing: `DEVELOPMENT_TEAM` in `ios/Signing.local.xcconfig` (from `Signing.local.xcconfig.example`).

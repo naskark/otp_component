@@ -40,6 +40,8 @@ local.properties
 .env
 .env.local
 
+android/node-binary.local.properties
+
 # node.js
 #
 node_modules/

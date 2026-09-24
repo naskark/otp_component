@@ -1,0 +1,44 @@
+ext {
+    resolveNodeBinaryForReactNative = {
+        def fromEnv = System.getenv("NODE_BINARY")
+        if (fromEnv != null && !fromEnv.trim().isEmpty()) {
+            return fromEnv.trim()
+        }
+
+        def localPropsFile = rootProject.file("node-binary.local.properties")
+        if (localPropsFile.exists()) {
+            def props = new Properties()
+            localPropsFile.withInputStream { props.load(it) }
+            def configured = props.getProperty("nodeBinary")
+            if (configured != null && !configured.trim().isEmpty()) {
+                return configured.trim()
+            }
+        }
+
+        def home = System.getProperty("user.home")
+        def nvmRoot = home != null ? new File(home, ".nvm/versions/node") : null
+        if (nvmRoot != null && nvmRoot.isDirectory()) {
+            def candidates = nvmRoot.listFiles()?.findAll { dir ->
+                new File(dir, "bin/node").exists()
+            }?.sort { a, b -> b.name <=> a.name }
+
+            for (dir in candidates ?: []) {
+                def nodeExe = new File(dir, "bin/node")
+                try {
+                    def proc = [nodeExe.absolutePath, "-p", "Number(process.versions.node.split('.')[0])"].execute()
+                    proc.waitForOrKill(15000)
+                    if (proc.exitValue() == 0) {
+                        def major = proc.text.trim().toInteger()
+                        if (major >= 22) {
+                            return nodeExe.absolutePath
+                        }
+                    }
+                } catch (Throwable ignored) {
+                    // try next candidate
+                }
+            }
+        }
+
+        return "node"
+    }
+}

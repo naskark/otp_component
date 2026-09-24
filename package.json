@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:release": "bash scripts/android-release.sh",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",

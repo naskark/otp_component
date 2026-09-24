@@ -36,6 +36,7 @@ export function createOtpService(config: OtpServiceConfig = {}) {
       otp,
       transactionId,
     }: VerifyOtpRequest): Promise<VerifyOtpResponse> {
+      console.log(`OTP entered: ${otp}`);
       await delay(networkDelayMs);
 
       if (forceNetworkError) {
